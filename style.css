@@ -1,0 +1,32 @@
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: sans-serif;
+}
+
+main {
+    display: flex;
+    place-content: center;
+}
+
+main canvas {
+    outline: 2px solid #000;
+}
+
+.controls {
+    color: white;
+    font-size: 14px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    place-content: center;
+    padding: 10px;
+    background: rgba(0,0,0,0.5);
+}
+
+#fps_limit_value, #pf_ms {
+    font-family: monospace;
+}

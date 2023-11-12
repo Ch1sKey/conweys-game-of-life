@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <aside>
+        <div class="controls">
+            <div><button id="play">Play</button></div> 
+            <div><button id="step">Next step</button></div> 
+            <div><button id="random">Fill random</button></div>
+            <br>
+            <div><button id="clear">Clear</button></div>
+            <br>
+            <div>
+                <div>New gen time</div> 
+                <div><span id="pf_ms">0</span> ms</div>
+            </div>
+            <br>
+            <div>
+                <details>
+                    <summary>Utils</summary>
+                    <div>
+                        <div><label for="fps_limit">FPS Limit: <span id="fps_limit_value"></span> </label></div>
+                        <div><input id="fps_limit" value="120" type="range" min="5" max="120" step="5" /></div>
+                    </div>                           
+                </details>
+            </div>             
+        </div>
+        
+    </aside>
+    <main></main>
+    <script type="module" src="./js/main.js"></script>
+</body>
+</html>
