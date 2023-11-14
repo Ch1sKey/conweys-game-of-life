@@ -1,6 +1,6 @@
 import { Grid } from './Grid.js'
 
-const SIZE = 200;
+const SIZE = 20;
 export class Game {
     #generation = 0
     #lastStepChangedCells = new Set();

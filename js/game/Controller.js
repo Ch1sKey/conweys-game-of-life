@@ -1,9 +1,11 @@
-import { View } from './View.js'
+import { GameView } from './GameView.js'
 import { Game } from './Game.js'
+import { HoverCanvasView } from './HoverCanvasView.js';
 
 export class Controller {
     #MAX_FPS_VALUE = 120;
-    #view = null;
+    #gameView = null;
+    #hoverView = null;
     #game = null;
     #isPlay = false;
     #playButton = null;
@@ -15,7 +17,6 @@ export class Controller {
     #fpsLimitInput = null;
 
     #pfMsTextbox = null
-    #pfFpsTextbox = null
 
     #lastRenderTime = performance.now()
 
@@ -23,12 +24,17 @@ export class Controller {
         const canvas = document.createElement('canvas');
         canvas.id = 'main'
         
-        this.#view = new View(canvas)
         this.#game = new Game();
-        this.#view.setPointerHandler(cell => {
-            this.#game.updateCell(cell.row, cell.col, 1)
-            this.#view.render(new Set([cell]));
+        this.#gameView = new GameView(canvas)
+        this.#hoverView = new HoverCanvasView(600,600)
+        this.#hoverView.setPointerHandler(({row, col}) => {
+            const cellValue = this.#game.getGrid().getValue(row, col);
+            const newValue = cellValue === 1 ? 0 : 1;
+            this.#game.updateCell(row, col, newValue)
+            console.log('reregister', row, col)
+            this.#gameView.render(new Set([{ row, col, value: newValue }]));
         })
+        this.#hoverView.setGridSize(this.#game.getGrid().size)
 
         this.#randomButton = document.getElementById('random');
         this.#randomButton.addEventListener('click', this.#onRandomClick)
@@ -49,8 +55,8 @@ export class Controller {
 
         this.#pfMsTextbox = document.getElementById('pf_ms');
 
-        this.#view.setGameData(this.#game.getGrid())
-        this.#view.render()
+        this.#gameView.setGameData(this.#game.getGrid())
+        this.#gameView.render()
 
         document.addEventListener('keydown', this.#onKeydown)
 
@@ -60,7 +66,7 @@ export class Controller {
     #onRandomClick = (event) => {
         event.preventDefault();
         this.#game.fillRandom();
-        this.#view.render();
+        this.#gameView.render();
     }
     #onPlayClick = (event) => {
         event.preventDefault();
@@ -69,7 +75,7 @@ export class Controller {
 
     #togglePlay() {
         this.#isPlay = !this.#isPlay;
-        this.#view.setEnablePointer(!this.#isPlay)
+        this.#hoverView.setEnablePointer(!this.#isPlay)
         this.#playButton.textContent = this.#isPlay ? 'Stop' : 'Play'
         this.#randomButton.disabled = this.#isPlay;
         this.#stepButton.disabled = this.#isPlay;
@@ -91,8 +97,8 @@ export class Controller {
     #onClearClick = event => {
         event.preventDefault()
         this.#game.reset();
-        this.#view.setGameData(this.#game.getGrid())
-        this.#view.clear()
+        this.#gameView.setGameData(this.#game.getGrid())
+        this.#gameView.clear()
     }
 
     #onFPSLimitChange = event => {
@@ -114,7 +120,7 @@ export class Controller {
 
         this.#lastRenderTime = performance.now()
         const changes = this.#game.nextGen();
-        this.#view.render(changes);
+        this.#gameView.render(changes);
         this.#setPerformanceData(performance.now() - this.#lastRenderTime);
     }
 
