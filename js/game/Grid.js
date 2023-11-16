@@ -4,9 +4,14 @@ export class Grid {
     #size = 0
     #grid = []
     constructor(rows, cols) {
-        this.#rows = rows;
-        this.#cols = cols;
-        this.#size = this.#rows;
+        this.#init(rows, cols)
+    }
+
+    #init(rows, cols) {
+        this.#grid = []
+        this.#rows = rows
+        this.#cols = cols
+        this.#size = this.#rows
         for (let row = 0; row < rows; row++) {
             this.#grid[row] = []
             for (let col = 0; col < cols; col++) {
@@ -16,15 +21,15 @@ export class Grid {
     }
 
     get size() {
-        return this.#size;
+        return this.#size
     }
 
     #normalizeCoordinate(value) {
-        let normalizedValue = value % this.#size;
+        let normalizedValue = value % this.#size
         if (normalizedValue < 0) {
             normalizedValue = this.#size + normalizedValue
         }
-        return normalizedValue;
+        return normalizedValue
     }
 
     getNeighborsData(row, col) {
@@ -47,14 +52,14 @@ export class Grid {
         const cells = [tl, tm, tr, r, br, bm, bl, l]
         return {
             cells,
-            aliveAmount: cells.reduce((acc, curr) => acc += curr.value, 0)
+            aliveAmount: cells.reduce((acc, curr) => (acc += curr.value), 0),
         }
     }
 
     getCell(row, col) {
-        const normalRow = this.#normalizeCoordinate(row);
-        const normalCol = this.#normalizeCoordinate(col);
-        return this.#grid[normalRow][normalCol];
+        const normalRow = this.#normalizeCoordinate(row)
+        const normalCol = this.#normalizeCoordinate(col)
+        return this.#grid[normalRow][normalCol]
     }
 
     getValue(row, col) {
@@ -62,13 +67,25 @@ export class Grid {
     }
 
     set(row, col, value) {
-        return this.#grid[row][col].value = value;
+        return (this.#grid[row][col].value = value)
     }
 
     traverse(callback) {
         for (let rowIndex = 0; rowIndex < this.#rows; rowIndex++) {
             for (let cellIndex = 0; cellIndex < this.#cols; cellIndex++) {
-                callback(cellIndex, rowIndex)
+                callback(rowIndex, cellIndex)
+            }
+        }
+    }
+
+    changeSize(rows, cols) {
+        const oldRows = this.#rows
+        const oldCols = this.#cols
+        const oldGrid = this.#grid
+        this.#init(rows, cols)
+        for (let row = 0; row < Math.min(rows, oldRows); row++) {
+            for (let col = 0; col < Math.min(cols, oldCols); col++) {
+                this.set(row, col, oldGrid[row][col].value)
             }
         }
     }

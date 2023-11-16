@@ -36,6 +36,10 @@ main canvas {
     background: rgba(0,0,0,0.5);
 }
 
+#size {
+    width: 5em;
+}
+
 #fps_limit_value, #pf_ms {
     font-family: monospace;
 }

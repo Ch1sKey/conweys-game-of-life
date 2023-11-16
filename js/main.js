@@ -1,3 +1,3 @@
-import { Controller } from './game/Controller.js'
+import { GameController } from "./game/GameController.js"
 
-const controller = new Controller();
+const controller = new GameController()
